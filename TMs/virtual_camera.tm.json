@@ -1,0 +1,81 @@
+{
+    "@context": [
+        "https://www.w3.org/2019/wot/td/v1",
+        {
+            "@language": "en",
+            "cell": "http://localhost:8070/cellOntology"
+        }
+    ],
+    "@type": "Thing",
+    "title": "VirtualCamera",
+    "id": "urn:dev:ops:32473-virtual-camera",
+    "description": "Virtual Camera to detect cubes in the scene",
+    "security": "nosec_sc",
+    "securityDefinitions": {
+        "nosec_sc": {
+            "scheme": "nosec"
+        }
+    },
+    "robotBaseFrame": {
+        "@type": "cell:Frame",
+        "@id": "urn:dev:ops:32473-virtual-camera#base",
+        "cell:hasPose": {
+            "@type": "cell:Pose",
+            "cell:referenceFrame": "cell:coppeliaSimWorld",
+            "cell:position": {
+                "@type": "cell:Position",
+                "cell:x": 0,
+                "cell:y": 0,
+                "cell:z": 0
+            },
+            "cell:orientation": {
+                "@type": "cell:Quaternion",
+                "cell:qx": 0,
+                "cell:qy": 0,
+                "cell:qz": 0,
+                "cell:qw": 1
+            }
+        }
+    },
+    "properties": {
+        "status": {
+            "title": "Device status",
+            "description": "Operational health of the device. Possible status: operational, broken, error.",
+            "type": "string",
+            "enum": ["operational", "broken", "error"],
+            "readOnly": true,
+            "observable": true
+        },
+        "coordinateFrame": {
+            "title": "Coordinate Frame",
+            "description": "Indicates the coordinate frame used by this device. 'local' = relative to camera base position; 'world' = absolute world coordinates.",
+            "type": "string",
+            "enum": ["local", "world"],
+            "readOnly": true,
+            "observable": false
+        }
+    },
+    "actions": {
+        "getCubesInRange": {
+            "title": "Get Cubes In Range",
+            "description": "Get positions of all cubes within the predefined range",
+            "synchronous": false,
+            "cell:hasPose": {
+                "@type": "cell:Pose",
+                "cell:referenceFrame": "urn:dev:ops:32473-virtual-camera#base"
+            },
+            "output": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "x": { "type": "number", "unit": "meter" },
+                        "y": { "type": "number", "unit": "meter" },
+                        "z": { "type": "number", "unit": "meter" }
+                    },
+                    "required": ["x", "y", "z"]
+                }
+            }
+        }
+    }
+}

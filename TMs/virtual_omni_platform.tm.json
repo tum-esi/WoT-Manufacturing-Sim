@@ -1,0 +1,79 @@
+{
+    "@context": [
+        "https://www.w3.org/2019/wot/td/v1",
+        {
+            "@language": "en"
+        }
+    ],
+    "@type": "Thing",
+    "title": "VirtualOmniPlatform",
+    "id": "urn:dev:ops:32473-virtual-omni-platform",
+    "description": "Virtual four-wheel omnidirectional mobile platform. Each of the four omni wheels (link[0..3]/regularRotation) can spin forward, spin backward, or stop, all at a fixed speed; combining the four wheel directions produces forward/backward, sideways (strafe) and rotational motion.",
+    "security": "nosec_sc",
+    "securityDefinitions": {
+        "nosec_sc": {
+            "scheme": "nosec"
+        }
+    },
+    "properties": {
+        "status": {
+            "title": "Device status",
+            "description": "Operational health of the device. Possible status: operational, broken, error.",
+            "type": "string",
+            "enum": ["operational", "broken", "error"],
+            "readOnly": true,
+            "observable": true
+        },
+        "wheelStates": {
+            "title": "Current wheel states",
+            "description": "The current direction of each of the four omni wheels, in order wheel1..wheel4 (mapping to link[0..3]/regularRotation).",
+            "type": "object",
+            "readOnly": true,
+            "properties": {
+                "wheel1": { "type": "string", "enum": ["forward", "backward", "stop"] },
+                "wheel2": { "type": "string", "enum": ["forward", "backward", "stop"] },
+                "wheel3": { "type": "string", "enum": ["forward", "backward", "stop"] },
+                "wheel4": { "type": "string", "enum": ["forward", "backward", "stop"] }
+            }
+        }
+    },
+    "actions": {
+        "setWheels": {
+            "title": "Set wheel directions",
+            "description": "Set the spin direction of each of the four omni wheels. Each wheel may be 'forward', 'backward' or 'stop'; the spin speed is fixed. The platform keeps driving in this configuration until it is changed or 'stop' is called.",
+            "synchronous": true,
+            "input": {
+                "type": "object",
+                "properties": {
+                    "wheel1": {
+                        "type": "string",
+                        "enum": ["forward", "backward", "stop"],
+                        "description": "Direction of wheel 1 (link[0]/regularRotation)"
+                    },
+                    "wheel2": {
+                        "type": "string",
+                        "enum": ["forward", "backward", "stop"],
+                        "description": "Direction of wheel 2 (link[1]/regularRotation)"
+                    },
+                    "wheel3": {
+                        "type": "string",
+                        "enum": ["forward", "backward", "stop"],
+                        "description": "Direction of wheel 3 (link[2]/regularRotation)"
+                    },
+                    "wheel4": {
+                        "type": "string",
+                        "enum": ["forward", "backward", "stop"],
+                        "description": "Direction of wheel 4 (link[3]/regularRotation)"
+                    }
+                },
+                "required": ["wheel1", "wheel2", "wheel3", "wheel4"]
+            }
+        },
+        "stop": {
+            "title": "Stop platform",
+            "description": "Stop the platform by setting all four wheels to 'stop' (zero velocity).",
+            "synchronous": true,
+            "idempotent": true
+        }
+    }
+}

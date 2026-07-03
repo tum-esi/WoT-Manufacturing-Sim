@@ -1,0 +1,68 @@
+{
+    "@context": [
+        "https://www.w3.org/2019/wot/td/v1",
+        {
+            "@language": "en",
+            "cell": "http://localhost:8070/cellOntology"
+        }
+    ],
+    "@type": "Thing",
+    "title": "VirtualConveyorBelt1",
+    "id": "urn:dev:ops:32473-virtual-conveyor-one",
+    "description": "Conveyor Belt on the Left (Virtual)",
+    "security": "nosec_sc",
+    "securityDefinitions": {
+        "nosec_sc": {
+            "scheme": "nosec"
+        }
+    },
+    "robotBaseFrame": {
+        "@type": "cell:Frame",
+        "@id": "urn:dev:ops:32473-virtual-conveyor-one#base",
+        "cell:hasPose": {
+            "@type": "cell:Pose",
+            "cell:referenceFrame": "cell:coppeliaSimWorld",
+            "cell:position": {
+                "@type": "cell:Position",
+                "cell:x": 0,
+                "cell:y": 0,
+                "cell:z": 0
+            },
+            "cell:orientation": {
+                "@type": "cell:Quaternion",
+                "cell:qx": 0,
+                "cell:qy": 0,
+                "cell:qz": 0,
+                "cell:qw": 1
+            }
+        }
+    },
+    "properties": {
+        "status": {
+            "title": "Device status",
+            "description": "Operational health of the device. Possible status: operational, broken, error.",
+            "type": "string",
+            "enum": ["operational", "broken", "error"],
+            "readOnly": true,
+            "observable": true
+        }
+    },
+    "actions": {
+        "startBeltBackward": {
+            "title": "Start conveyor belt with fixed speed",
+            "description": "This action starts moving the conveyor belt backward"
+        },
+        "startBeltForward": {
+            "title": "Start conveyor belt",
+            "description": "This action starts moving the conveyor belt forward"
+        },
+        "stopBelt": {
+            "title": "Stop conveyor belt",
+            "description": "This action stops moving the conveyor belt"
+        },
+        "moveCubeToEnd": {
+            "title": "Move cube to end",
+            "description": "Move the cube from the start of the conveyor belt to the end"
+        }
+    }
+}

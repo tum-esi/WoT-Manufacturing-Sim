@@ -1,0 +1,164 @@
+{
+    "@context":[
+        "https://www.w3.org/2019/wot/td/v1",
+        {
+          "@language":"en",
+          "cell": "http://localhost:8070/cellOntology"
+        }
+      ],
+    "@type":"Thing",
+    "title": "VirtualUR5",
+    "id": "urn:dev:ops:32473-virtual-ur5",
+    "description": "Virtual UR5 Collaborative Robotic Arm.",
+    "security": "nosec_sc",
+    "securityDefinitions": { 
+      "nosec_sc": {
+        "scheme": "nosec" 
+      }
+    },
+    "robotBaseFrame": {
+        "@type": "cell:Frame",
+        "@id": "urn:dev:ops:32473-virtual-ur5#base",
+        "cell:hasPose": {
+            "@type": "cell:Pose",
+            "cell:referenceFrame": "cell:coppeliaSimWorld",
+            "cell:position": {
+                "@type": "cell:Position",
+                "cell:x": 0,
+                "cell:y": 0,
+                "cell:z": 0
+            },
+            "cell:orientation": {
+                "@type": "cell:Quaternion",
+                "cell:qx": 0,
+                "cell:qy": 0,
+                "cell:qz": 0,
+                "cell:qw": 1
+            }
+        }
+    },
+    "properties": {
+        "status": {
+            "title": "Device status",
+            "description": "Operational health of the device. Possible status: operational, broken, error.",
+            "type": "string",
+            "enum": ["operational", "broken", "error"],
+            "readOnly": true,
+            "observable": true
+        },
+        "coordinateFrame": {
+            "title": "Coordinate Frame",
+            "description": "Indicates the coordinate frame used by this device. 'local' = relative to robot base position; 'world' = absolute world coordinates.",
+            "type": "string",
+            "enum": ["local", "world"],
+            "readOnly": true,
+            "observable": false
+        },
+        "currentPose":{
+            "title": "Read UR5 Current Position",
+            "description": "get the current Cartesian position of the robot end-effector.",
+            "type": "object",
+            "readOnly": true,
+            "minItems": 6,
+            "maxItems": 6,
+            "cell:hasPose": {
+                "@type": "cell:Pose",
+                "cell:referenceFrame": "urn:dev:ops:32473-virtual-ur5#base"
+            },
+            "properties": {
+                "x": {
+                    "type": "number",
+                    "unit": "meter",
+                    "description": "X"
+                },
+                "y":{
+                    "type": "number",
+                    "unit": "meter",
+                    "description": "Y"
+                },
+                "z":{
+                    "type": "number",
+                    "unit": "meter",
+                    "description": "Z"
+                },
+                "rx":{
+                    "type": "number",
+                    "unit": "degree",
+                    "description": "Rotation around X"
+                },
+                "ry":{
+                    "type": "number",
+                    "unit": "degree",
+                    "description": "Rotation around Y"
+                },
+                "rz":{
+                    "type": "number",
+                    "unit": "degree",
+                    "description": "Rotation around Z"
+                }
+            }
+        }
+    },
+    "actions": {
+        "goToPosition":{
+            "title":"Go to Position",
+            "description":"Moves the robot end-effector to a specified absolute Cartesian position.",
+            "synchronous":true,
+            "cell:hasPose": {
+                "@type": "cell:Pose",
+                "cell:referenceFrame": "cell:coppeliaSimWorld"
+            },
+            "input": {
+                "type": "object",
+                "minItems": 6,
+                "maxItems": 6,
+                "properties": {
+                    "x": {
+                        "type": "number",
+                        "unit": "meter",
+                        "description": "X"
+                    },
+                    "y":{
+                        "type": "number",
+                        "unit": "meter",
+                        "description": "Y"
+                    },
+                    "z":{
+                        "type": "number",
+                        "unit": "meter",
+                        "description": "Z"
+                    },
+                    "rx":{
+                        "type": "number",
+                        "unit": "degree",
+                        "description": "Rotation around X"
+                    },
+                    "ry":{
+                        "type": "number",
+                        "unit": "degree",
+                        "description": "Rotation around Y"
+                    },
+                    "rz":{
+                        "type": "number",
+                        "unit": "degree",
+                        "description": "Rotation around Z"
+                    }
+                }
+            }
+        },
+        "closeGripper":{
+            "title":"Close Gripper",
+            "description":"Closes the RG2 gripper by setting the integer signal to 1.",
+            "safe": false,
+            "idempotent": true,
+            "synchronous":true
+        },
+        "openGripper":{
+            "title":"Open Gripper",
+            "description":"Opens the RG2 gripper by setting the integer signal to 0.",
+            "safe": false,
+            "idempotent": true,
+            "synchronous":true
+        }
+    }
+}

@@ -1,0 +1,125 @@
+{
+    "@context": [
+        "https://www.w3.org/2019/wot/td/v1",
+        {
+            "@language": "en",
+            "cell": "http://localhost:8070/cellOntology"
+        }
+    ],
+    "@type": "Thing",
+    "title": "VirtualUarm",
+    "id": "urn:dev:ops:32473-virtual-uarm-two",
+    "description": "Uarm (Virtual)",
+    "security": "nosec_sc",
+    "securityDefinitions": {
+        "nosec_sc": {
+            "scheme": "nosec"
+        }
+    },
+    "robotBaseFrame": {
+        "@type": "cell:Frame",
+        "@id": "urn:dev:ops:32473-virtual-uarm-two#base",
+        "cell:hasPose": {
+            "@type": "cell:Pose",
+            "cell:referenceFrame": "cell:coppeliaSimWorld",
+            "cell:position": {
+                "@type": "cell:Position",
+                "cell:x": 0,
+                "cell:y": 0,
+                "cell:z": 0
+            },
+            "cell:orientation": {
+                "@type": "cell:Quaternion",
+                "cell:qx": 0,
+                "cell:qy": 0,
+                "cell:qz": 0,
+                "cell:qw": 1
+            }
+        }
+    },
+    "properties": {
+        "status": {
+            "title": "Device status",
+            "description": "Operational health of the device. Possible status: operational, broken, error.",
+            "type": "string",
+            "enum": ["operational", "broken", "error"],
+            "readOnly": true,
+            "observable": true
+        },
+        "coordinateFrame": {
+            "title": "Coordinate Frame",
+            "description": "Indicates the coordinate frame used by this device. 'local' = relative to robot base position; 'world' = absolute world coordinates.",
+            "type": "string",
+            "enum": ["local", "world"],
+            "readOnly": true,
+            "observable": false
+        },
+        "currentPosition": {
+            "title": "Current Gripper Position",
+            "description": "Reads the current absolute position (x, y, z) of the Uarm gripper/end-effector in world coordinates.",
+            "type": "object",
+            "readOnly": true,
+            "cell:hasPose": {
+                "@type": "cell:Pose",
+                "cell:referenceFrame": "urn:dev:ops:32473-virtual-uarm-two#base"
+            },
+            "properties": {
+                "x": {
+                    "type": "number",
+                    "unit": "meter"
+                },
+                "y": {
+                    "type": "number",
+                    "unit": "meter"
+                },
+                "z": {
+                    "type": "number",
+                    "unit": "meter"
+                }
+            }
+        }
+    },
+    "actions": {
+        "goTo": {
+            "title": "Go to position",
+            "description": "Move to Position x,y,z given by the user with fixed speed",
+            "synchronous": false,
+            "cell:hasPose": {
+                "@type": "cell:Pose",
+                "cell:referenceFrame": "cell:coppeliaSimWorld"
+            },
+            "input": {
+                "properties": {
+                    "x": {
+                        "type": "number",
+                        "unit": "meter"
+                    },
+                    "y": {
+                        "type": "number",
+                        "unit": "meter"
+                    },
+                    "z": {
+                        "type": "number",
+                        "unit": "meter"
+                    }
+                },
+                "required": [
+                    "x",
+                    "y",
+                    "z"
+                ],
+                "type": "object"
+            }
+        },
+        "gripClose": {
+            "title": "Close gripper",
+            "description": "Close Uarm gripper",
+            "synchronous": false
+        },
+        "gripOpen": {
+            "title": "Open gripper",
+            "description": "Open Uarm gripper",
+            "synchronous": false
+        }
+    }
+}
